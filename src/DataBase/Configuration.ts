@@ -3,6 +3,7 @@ import {User} from '../Entities/User';
 import {Role} from "../Entities/Role";
 import {Post} from "../Entities/Post";
 import {Category} from "../Entities/Category";
+import {Comment} from "../Entities/Comment";
 
 
 export default async function createConnectionDB(){
@@ -16,6 +17,6 @@ export default async function createConnectionDB(){
         database: process.env.database_DB,
         synchronize: true,
         logging: true,
-        entities: [User, Role, Post, Category]
+        entities: [User, Role, Post, Category, Comment]
     });
 };

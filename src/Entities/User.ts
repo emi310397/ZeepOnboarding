@@ -20,9 +20,6 @@ export class User extends BaseEntity{
     @Column()
     public password: string;
 
-    @OneToMany(type => Post, post => post.user)
-    posts: Post[];
-
     @Column()
     public token: string;
 }

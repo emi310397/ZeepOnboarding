@@ -20,12 +20,27 @@ class Router {
     }
 
     private setInitialConfig(){
+        this.setBodyParer();
+        this.setViewEngine();
+    }
+
+    private setBodyParer(){
         this.express.use(bodyParser.urlencoded({
             extended: true
         }));
         this.express.use(bodyParser.json());
+    }
 
+    private setViewEngine(){
         this.express.set('views', path.join(__dirname, '..', 'views'));
+        this.express.engine('html', exphbs({
+            defaultLayout: 'main',
+            layoutsDir: path.join(this.express.get('views'), 'layouts'),
+            partialsDir: path.join(this.express.get('views'), 'partials'),
+            extname: '.html',
+        }));
+        this.express.set('view engine', 'html');
+        /*this.express.set('views', path.join(__dirname, '..', 'views'));
         this.express.engine('hbs', exphbs({
             defaultLayout: 'main',
             layoutsDir: path.join(this.express.get('views'), 'layouts'),
@@ -33,7 +48,7 @@ class Router {
             extname: '.hbs',
             helpers: require('../Lib/handlebars')
         }));
-        this.express.set('view engine', 'hbs');
+        this.express.set('view engine', 'hbs');*/
     }
 
     private userRoutes(){
@@ -46,11 +61,10 @@ class Router {
         this.express.get('/user/signup', UserController.showSignUp);
         this.express.post('/user/signup', UserController.signUp);
 
-        // this.express.get('/user/signin', UserController.signIn);
-        this.express.post('/user/signin', UserController.signIn);
-        this.express.get('/user/:id', auth, UserController.show);
+        this.express.post('/user/logIn', UserController.logIn);
+        this.express.get('/user/:id', auth, UserController.getUser);
 
-        this.express.post('/user/logout', auth, UserController.logout);
+        this.express.post('/user/logout/:id', auth, UserController.logout);
     }
 
     private postRotes(){

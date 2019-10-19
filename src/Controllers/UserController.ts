@@ -51,15 +51,10 @@ export class UserController {
     };
 
     public static async showSignUp(req: Request, res: Response) {
-        res.render('layouts/main', {body: this.getSignUpPage()});
-        // res.render('auth/signup');
+        res.render('auth/signup');
     }
 
-    private static getSignUpPage() {
-        return "<p>Something</p>";
-    }
-
-    public static async signIn(req: Request, res: Response) {
+    public static async logIn(req: Request, res: Response) {
         const {email, password} = req.body;
         const user = await User.findOne({where: {email}});
 
@@ -82,7 +77,7 @@ export class UserController {
         }
     }
 
-    public static async show(req: Request, res: Response) {
+    public static async getUser(req: Request, res: Response) {
         const {id} = req.params;
         const user = await User.findOne(id);
         res.status(200).json({user});
@@ -91,6 +86,10 @@ export class UserController {
     public static async logout(req: Request, res: Response) {
         const {id} = req.params;
         const user = await User.findOne(id);
+
+        if (!user) {
+            res.status(401).json("The user doesn't exist.");
+        }
 
         await UserController.destroyAuthToken(user);
         res.status(200).json("Logged out");

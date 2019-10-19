@@ -1,14 +1,11 @@
 import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {User} from "./User";
-import {Category} from "./Category";
+import {Post} from "./Post";
 
 @Entity()
-export class Post extends BaseEntity {
+export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column()
-    title: string;
 
     @Column()
     content: string;
@@ -16,6 +13,6 @@ export class Post extends BaseEntity {
     @ManyToOne(type => User, User => Post)
     user: User;
 
-    @ManyToOne(type => Category)
-    category: Category;
+    @ManyToOne(type => Post, Post => Comment)
+    post: Post;
 }
