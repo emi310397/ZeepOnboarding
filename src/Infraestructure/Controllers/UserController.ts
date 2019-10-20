@@ -1,6 +1,6 @@
 import {Request, Response} from 'express';
-import {User} from '../Entities/User';
-import {Role} from "../Entities/Role";
+import {User} from '../../Domain/Entities/User';
+import {Role} from "../../Domain/Entities/Role";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';

@@ -1,6 +1,5 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, ManyToOne, JoinTable, OneToMany} from "typeorm";
+import {BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {Role} from "./Role";
-import {Post} from "./Post";
 
 @Entity()
 export class User extends BaseEntity{

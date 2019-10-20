@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
-import {User} from "../Entities/User";
-import {Comment} from "../Entities/Comment";
-import {Post} from "../Entities/Post";
+import {User} from "../../Domain/Entities/User";
+import {Comment} from "../../Domain/Entities/Comment";
+import {Post} from "../../Domain/Entities/Post";
 
 export class CommentController {
 

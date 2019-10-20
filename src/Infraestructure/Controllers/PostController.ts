@@ -1,7 +1,7 @@
 import {Request, Response} from 'express';
-import {User} from "../Entities/User";
-import {Category} from "../Entities/Category";
-import {Post} from "../Entities/Post";
+import {User} from "../../Domain/Entities/User";
+import {Category} from "../../Domain/Entities/Category";
+import {Post} from "../../Domain/Entities/Post";
 
 export class PostController {
 

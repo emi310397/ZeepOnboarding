@@ -3,7 +3,7 @@ import {PostController} from "../Controllers/PostController";
 import path from 'path';
 import exphbs from 'express-handlebars';
 import {CommentController} from "../Controllers/CommentController";
-const auth = require('../Middlewares/auth');
+const auth = require('../Infraestructure/Middlewares/auth');
 const bodyParser = require('body-parser');
 
 class Router {

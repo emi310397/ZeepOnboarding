@@ -1,9 +1,9 @@
 import {createConnection} from "typeorm";
-import {User} from '../Entities/User';
-import {Role} from "../Entities/Role";
-import {Post} from "../Entities/Post";
-import {Category} from "../Entities/Category";
-import {Comment} from "../Entities/Comment";
+import {User} from '../../Domain/Entities/User';
+import {Role} from "../../Domain/Entities/Role";
+import {Post} from "../../Domain/Entities/Post";
+import {Category} from "../../Domain/Entities/Category";
+import {Comment} from "../../Domain/Entities/Comment";
 
 
 export default async function createConnectionDB(){

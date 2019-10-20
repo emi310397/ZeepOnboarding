@@ -1,7 +1,7 @@
-import Router from "./Router/Router";
+import Router from "./Infraestructure/Router/Router";
 import express from 'express';
 import("reflect-metadata");
-import createConnectionDB from './DataBase/Configuration';
+import createConnectionDB from './Infraestructure/DataBase/Configuration';
 import * as dotenv from 'dotenv';
 import config from 'config';
 
