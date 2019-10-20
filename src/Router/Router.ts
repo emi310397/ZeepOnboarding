@@ -2,6 +2,7 @@ import {UserController} from '../Controllers/UserController';
 import {PostController} from "../Controllers/PostController";
 import path from 'path';
 import exphbs from 'express-handlebars';
+import {CommentController} from "../Controllers/CommentController";
 const auth = require('../Middlewares/auth');
 const bodyParser = require('body-parser');
 
@@ -17,6 +18,7 @@ class Router {
         this.setInitialConfig();
         this.userRoutes();
         this.postRotes();
+        this.commentRotes();
     }
 
     private setInitialConfig(){
@@ -72,6 +74,13 @@ class Router {
         this.express.post('/post/', auth, PostController.newPost);
         this.express.post('/post/delete/:id', auth, PostController.deletePost);
         this.express.post('/post/update/:id', auth, PostController.updatePost);
+    }
+
+    private commentRotes(){
+        this.express.get('/post/comment/:id', auth, CommentController.getComment);
+        this.express.post('/post/comment/', auth, CommentController.newComment);
+        this.express.post('/post/comment/delete/:id', auth, CommentController.deleteComment);
+        this.express.post('/post/comment/update/:id', auth, CommentController.updateComment);
     }
 }
 

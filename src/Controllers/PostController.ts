@@ -6,9 +6,9 @@ import {Post} from "../Entities/Post";
 export class PostController {
 
     public static async getPost(req: Request, res: Response) {
-        const id = req.body;
+        const {id} = req.params;
 
-        const post = await Post.findOne({id});
+        const post = await Post.findOne(id);
 
         if (!post) {
             res.status(401).json("The post doesn't exist.");
@@ -52,9 +52,9 @@ export class PostController {
     }
 
     public static async deletePost(req: Request, res: Response) {
-        const id = req.body;
+        const {id} = req.params;
 
-        const post = await Post.findOne({id});
+        const post = await Post.findOne(id);
 
         if (!post) {
             res.status(401).json("The post doesn't exist.");
@@ -66,9 +66,10 @@ export class PostController {
     }
 
     public static async updatePost(req: Request, res: Response) {
-        const {id, title, content, categoryName} = req.body;
+        const {id} = req.params;
+        const {title, content, categoryName} = req.body;
 
-        const post = await Post.findOne({id});
+        const post = await Post.findOne(id);
 
         if (!post) {
             res.status(401).json("The post doesn't exist.");
