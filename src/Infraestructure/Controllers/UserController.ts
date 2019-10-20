@@ -5,10 +5,17 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Joi from 'joi';
 import config from "config";
+import NewUserAdapter from "./Adapters/UserAdapters/NewUserAdapter";
+import NewUserUseCase from "../../Domain/UseCases/UserUseCases/NewUserUseCase";
 
 export class UserController {
 
     public static signUp = async (req: Request, res: Response) => {
+        const command = await NewUserAdapter.adpat(req);
+        const response = await NewUserUseCase.execute(command);
+
+        res.status(response.status()).json(response.object());
+        //------------------------------------------
         let user;
 
         //find an existing user
