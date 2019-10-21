@@ -1,5 +1,5 @@
 import {Request} from "express";
-import NewUserCommand from "../../../Commands/UserCommands/NewUserCommand";
+import NewUserCommand from "../../Commands/UserCommands/NewUserCommand";
 
 export default class NewUserAdapter {
     public static adpat = async (req: Request) => {
