@@ -2,7 +2,9 @@ import {Request, Response} from 'express';
 import {User} from "../../Domain/Entities/User";
 import {Comment} from "../../Domain/Entities/Comment";
 import {Post} from "../../Domain/Entities/Post";
+import {injectable} from "inversify";
 
+@injectable()
 export class CommentController {
 
     public static async getComment(req: Request, res: Response) {

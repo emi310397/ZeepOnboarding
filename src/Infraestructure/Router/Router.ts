@@ -22,8 +22,8 @@ class Router {
     ) {
         this.express = express;
         this.userController = userController;
-        this.postController = userController;
-        this.commentController = userController;
+        this.postController = postController;
+        this.commentController = commentController;
     }
 
     public up() {

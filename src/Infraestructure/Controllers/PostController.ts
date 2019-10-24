@@ -2,7 +2,9 @@ import {Request, Response} from 'express';
 import {User} from "../../Domain/Entities/User";
 import {Category} from "../../Domain/Entities/Category";
 import {Post} from "../../Domain/Entities/Post";
+import {injectable} from "inversify";
 
+@injectable()
 export class PostController {
 
     public static async getPost(req: Request, res: Response) {

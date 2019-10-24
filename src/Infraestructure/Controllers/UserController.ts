@@ -1,13 +1,26 @@
 import {Request, Response} from 'express';
 import {User} from '../../Domain/Entities/User';
-import {Role} from "../../Domain/Entities/Role";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import config from "config";
 import NewUserAdapter from "../Adapters/UserAdapters/NewUserAdapter";
 import NewUserHandler from "../../Domain/Handlers/UserHandler/NewUserHandler";
+import {inject, injectable} from 'inversify';
+import TYPES from "../../types";
 
+@injectable()
 export class UserController {
+
+    private newUserAdapter: NewUserAdapter;
+    private newUserHandler: NewUserHandler;
+
+    constructor(
+        @inject(TYPES.NewUserAdapter) newUserAdapter: NewUserAdapter,
+        @inject(TYPES.NewUserHandler) newUserHandler: NewUserHandler
+    ) {
+        this.newUserAdapter = newUserAdapter;
+        this.newUserHandler = newUserHandler;
+    }
 
     public static signUp = async (req: Request, res: Response) => {
         try {
