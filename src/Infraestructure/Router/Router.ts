@@ -4,42 +4,48 @@ import {CommentController} from "../Controllers/CommentController";
 import path from 'path';
 import exphbs from 'express-handlebars';
 import {inject} from 'inversify';
+
 const auth = require('../Infraestructure/Middlewares/auth');
 const bodyParser = require('body-parser');
 
 class Router {
-
     private express;
     private userController: UserController;
+    private postController: PostController;
+    private commentController: CommentController;
 
     constructor(
         express,
-        @inject(UserController) userController
-    ){
+        @inject(UserController) userController,
+        @inject(PostController) postController,
+        @inject(CommentController) commentController
+    ) {
         this.express = express;
         this.userController = userController;
+        this.postController = userController;
+        this.commentController = userController;
     }
 
-    public up(){
+    public up() {
         this.setInitialConfig();
         this.userRoutes();
         this.postRoutes();
         this.commentRoutes();
     }
 
-    private setInitialConfig(){
-        this.setBodyParer();
+    private setInitialConfig() {
+        this.setBodyParser();
         this.setViewEngine();
     }
 
-    private setBodyParer(){
+    private setBodyParser() {
         this.express.use(bodyParser.urlencoded({
             extended: true
         }));
         this.express.use(bodyParser.json());
     }
 
-    private setViewEngine(){
+    private setViewEngine() {
         this.express.set('views', path.join(__dirname, '..', 'views'));
         this.express.engine('html', exphbs({
             defaultLayout: 'main',
@@ -59,7 +65,7 @@ class Router {
         this.express.set('view engine', 'hbs');*/
     }
 
-    private userRoutes(){
+    private userRoutes() {
         //-------------Home-------------
         this.express.get('/', (req, res) => {
             res.send("Home page");
@@ -73,14 +79,14 @@ class Router {
         this.express.post('/user/logout/:id', auth, UserController.logout);
     }
 
-    private postRoutes(){
+    private postRoutes() {
         this.express.get('/post/:id', auth, PostController.getPost);
         this.express.post('/post/', auth, PostController.newPost);
         this.express.post('/post/delete/:id', auth, PostController.deletePost);
         this.express.post('/post/update/:id', auth, PostController.updatePost);
     }
 
-    private commentRoutes(){
+    private commentRoutes() {
         this.express.get('/post/comment/:id', auth, CommentController.getComment);
         this.express.post('/post/comment/', auth, CommentController.newComment);
         this.express.post('/post/comment/delete/:id', auth, CommentController.deleteComment);

@@ -3,6 +3,9 @@ import express from 'express';
 import createConnectionDB from './Infraestructure/DataBase/Configuration';
 import * as dotenv from 'dotenv';
 import config from 'config';
+import container from "./inversify.config";
+import TYPES from "./types";
+
 import("reflect-metadata");
 
 class App {
@@ -10,7 +13,7 @@ class App {
     private express;
     private router;
 
-    constructor(){
+    constructor() {
         if (!config.get("myprivatekey")) {
             console.error("FATAL ERROR: myprivatekey is not defined.");
             process.exit(1);
@@ -18,16 +21,21 @@ class App {
         dotenv.config();
         this.express = express();
         createConnectionDB();
-        this.router = new Router(this.express);
+        this.router = new Router(
+            this.express,
+            container.get(TYPES.UserController),
+            container.get(TYPES.PostController),
+            container.get(TYPES.CommentController)
+        );
     }
 
-    public run(){
+    public run() {
         this.upServer();
         this.router.up();
     }
 
-    private upServer(){
-        this.express.listen(process.env.PORT, function(){
+    private upServer() {
+        this.express.listen(process.env.PORT, function () {
             console.log('Server is run in port', process.env.PORT);
         });
     }

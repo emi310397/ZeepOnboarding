@@ -1,5 +1,7 @@
 let TYPES = {
-    Warrior: Symbol("Warrior"),
-    Weapon: Symbol("Weapon"),
-    ThrowableWeapon: Symbol("ThrowableWeapon")
+    UserController: Symbol("UserController"),
+    PostController: Symbol("PostController"),
+    CommentController: Symbol("CommentController")
 };
+
+export default TYPES;
