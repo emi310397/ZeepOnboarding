@@ -18,6 +18,7 @@ export class User extends BaseEntity{
         this._email = email;
         this._role = role;
         this._password = password;
+        this._isBlocked = false;
     }
 
     @Column()

@@ -7,11 +7,11 @@ export class Session extends BaseEntity {
     public readonly id: number;
 
     @OneToOne(type => User)
-    public readonly user: string;
+    public readonly user: User;
 
     private _token: string;
 
-    constructor(user: string, token: string) {
+    constructor(user: User, token: string) {
         super();
         this.user = user;
         this._token = token;

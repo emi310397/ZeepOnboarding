@@ -3,59 +3,17 @@ import {User} from '../../Domain/Entities/User';
 import {Role} from "../../Domain/Entities/Role";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import Joi from 'joi';
 import config from "config";
 import NewUserAdapter from "../Adapters/UserAdapters/NewUserAdapter";
-import NewUserUseCase from "../../Domain/UseCases/UserUseCases/NewUserUseCase";
+import NewUserHandler from "../../Domain/Handlers/UserHandler/NewUserHandler";
 
 export class UserController {
 
     public static signUp = async (req: Request, res: Response) => {
-        const command = await NewUserAdapter.adpat(req);
-        const response = await NewUserUseCase.execute(command);
-        res.status(response.status()).json(response.object());
-        //------------------------------------------
-
-
-
-
-
-        let user;
-
-        //find an existing user
-        user = await User.findOne({email: req.body.email});
-        if (user) return res.status(400).send("User already registered.");
-
-        const {username, email, password, roleName} = req.body;
-
-        let role = await Role.findOne({where: {name: roleName}});
-
-        if (!role) {
-            role = await Role.findOne({where: {name: 'invited'}});
-        }
-
-        //create the user
-        user = new User();
-        user.username = username;
-        user.email = email;
-        user.password = await bcrypt.hash(password, 10);
-        user.role = role;
-
         try {
-            //create the token
-            const token = await UserController.generateAuthToken(user);
-            res.header("x-auth-token", token);
-
-            user.token = token;
-            await user.save();
-
-            res.status(200).json({
-                id: user.id,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            });
-
+            const command = await NewUserAdapter.adapt(req);
+            const user = await NewUserHandler.execute(command);
+            res.header("x-auth-token", command.token).status(200).json({message: "User registered", user});
         } catch (error) {
             res.status(500).json(error);
         }
@@ -118,14 +76,5 @@ export class UserController {
         } catch (error) {
             return error;
         }
-    };
-
-    public static validateUser = user => {
-        const schema = {
-            username: Joi.string().min(3).max(50).required(),
-            email: Joi.string().min(5).max(255).required().email(),
-            password: Joi.string().min(3).max(255).required(),
-        };
-        return Joi.validate(user, schema);
     };
 }
