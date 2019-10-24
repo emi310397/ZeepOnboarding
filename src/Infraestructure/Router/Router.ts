@@ -4,12 +4,13 @@ import {CommentController} from "../Controllers/CommentController";
 import path from 'path';
 import exphbs from 'express-handlebars';
 import {inject} from 'inversify';
+import {Express} from "express";
 
 const auth = require('../Infraestructure/Middlewares/auth');
 const bodyParser = require('body-parser');
 
 class Router {
-    private express;
+    private express: Express;
     private userController: UserController;
     private postController: PostController;
     private commentController: CommentController;
