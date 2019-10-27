@@ -1,10 +1,12 @@
-import {UserController} from '../Controllers/UserController';
-import {PostController} from "../Controllers/PostController";
-import {CommentController} from "../Controllers/CommentController";
 import path from 'path';
 import exphbs from 'express-handlebars';
 import {inject} from 'inversify';
-import {Express} from "express";
+import {Express, NextFunction, Request, Response} from "express";
+import container from "../../inversify.config";
+import {UserController} from '../Controllers/UserController';
+import {PostController} from "../Controllers/PostController";
+import {CommentController} from "../Controllers/CommentController";
+import {ErrorHandler} from "../Utils/ErrorHandler";
 
 const auth = require('../Infraestructure/Middlewares/auth');
 const bodyParser = require('body-parser');
@@ -35,6 +37,10 @@ class Router {
     }
 
     private setInitialConfig() {
+        this.express.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+            const errorHandler: ErrorHandler = container.get(ErrorHandler);
+            errorHandler.handle(err, res);
+        });
         this.setBodyParser();
         this.setViewEngine();
     }
