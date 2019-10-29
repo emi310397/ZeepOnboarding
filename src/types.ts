@@ -9,6 +9,7 @@ let TYPES = {
     // Adapters
     NewUserAdapter: Symbol("NewUserAdapter"),
     LogInAdapter: Symbol("LogInAdapter"),
+    LogOutAdapter: Symbol("LogOutAdapter"),
 
     // Sevices
     AuthorizationService: Symbol("AuthorizationService"),
@@ -17,7 +18,8 @@ let TYPES = {
     // Handlers
     NewUserHandler: Symbol("NewUserHandler"),
     NewSessionHandler: Symbol("NewSessionHandler"),
-    LogInHandler: Symbol("LogInHandler")
+    LogInHandler: Symbol("LogInHandler"),
+    LogOutHandler: Symbol("LogOutHandler")
 };
 
 export default TYPES;
