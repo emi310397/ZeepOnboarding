@@ -7,7 +7,7 @@ import {injectable} from "inversify";
 @injectable()
 export class PostController {
 
-    public static async getPost(req: Request, res: Response) {
+    public async getPost(req: Request, res: Response) {
         const {id} = req.params;
 
         const post = await Post.findOne(id);
@@ -19,7 +19,7 @@ export class PostController {
         res.status(200).json({post});
     }
 
-    public static async newPost(req: Request, res: Response) {
+    public async newPost(req: Request, res: Response) {
         const {userId, title, content, categoryName} = req.body;
 
         const user = await User.findOne({id: userId});
@@ -53,7 +53,7 @@ export class PostController {
         }
     }
 
-    public static async deletePost(req: Request, res: Response) {
+    public async deletePost(req: Request, res: Response) {
         const {id} = req.params;
 
         const post = await Post.findOne(id);
@@ -67,7 +67,7 @@ export class PostController {
         res.status(200).json("Post deleted");
     }
 
-    public static async updatePost(req: Request, res: Response) {
+    public async updatePost(req: Request, res: Response) {
         const {id} = req.params;
         const {title, content, categoryName} = req.body;
 

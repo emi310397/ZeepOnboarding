@@ -1,3 +1,5 @@
+import AuthorizationService from "./Infraestructure/Services/AuthorizationService";
+
 let TYPES = {
     // Controllers
     UserController: Symbol("UserController"),
@@ -6,9 +8,16 @@ let TYPES = {
 
     // Adapters
     NewUserAdapter: Symbol("NewUserAdapter"),
+    LogInAdapter: Symbol("LogInAdapter"),
 
     // Sevices
-    NewUserHandler: Symbol("NewUserHandler")
+    AuthorizationService: Symbol("AuthorizationService"),
+    PasswordHashService: Symbol("PasswordHashService"),
+
+    // Handlers
+    NewUserHandler: Symbol("NewUserHandler"),
+    NewSessionHandler: Symbol("NewSessionHandler"),
+    LogInHandler: Symbol("LogInHandler")
 };
 
 export default TYPES;

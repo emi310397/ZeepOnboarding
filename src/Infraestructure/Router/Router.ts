@@ -37,12 +37,16 @@ class Router {
     }
 
     private setInitialConfig() {
+        this.setErrorHandler();
+        this.setBodyParser();
+        this.setViewEngine();
+    }
+
+    private setErrorHandler() {
         this.express.use((err: Error, req: Request, res: Response, next: NextFunction) => {
             const errorHandler: ErrorHandler = container.get(ErrorHandler);
             errorHandler.handle(err, res);
         });
-        this.setBodyParser();
-        this.setViewEngine();
     }
 
     private setBodyParser() {
@@ -73,31 +77,24 @@ class Router {
     }
 
     private userRoutes() {
-        //-------------Home-------------
-        this.express.get('/', (req, res) => {
-            res.send("Home page");
-        });
-
-        //-------------User-------------
-        this.express.get('/user/signup', UserController.showSignUp);
-        this.express.post('/user/signup', UserController.signUp);
-        this.express.get('/user/:id', auth, UserController.getUser);
-        this.express.post('/user/logIn', UserController.logIn);
-        this.express.post('/user/logout/:id', auth, UserController.logout);
+        this.express.post('/user/signUp', this.userController.signUp);
+        this.express.get('/user/:id', auth, this.userController.getUser);
+        this.express.post('/user/logIn', this.userController.logIn);
+        this.express.post('/user/logout/:id', auth, this.userController.logout);
     }
 
     private postRoutes() {
-        this.express.get('/post/:id', auth, PostController.getPost);
-        this.express.post('/post/', auth, PostController.newPost);
-        this.express.post('/post/delete/:id', auth, PostController.deletePost);
-        this.express.post('/post/update/:id', auth, PostController.updatePost);
+        this.express.get('/post/:id', auth, this.postController.getPost);
+        this.express.post('/post/', auth, this.postController.newPost);
+        this.express.post('/post/delete/:id', auth, this.postController.deletePost);
+        this.express.post('/post/update/:id', auth, this.postController.updatePost);
     }
 
     private commentRoutes() {
-        this.express.get('/post/comment/:id', auth, CommentController.getComment);
-        this.express.post('/post/comment/', auth, CommentController.newComment);
-        this.express.post('/post/comment/delete/:id', auth, CommentController.deleteComment);
-        this.express.post('/post/comment/update/:id', auth, CommentController.updateComment);
+        this.express.get('/post/comment/:id', auth, this.commentController.getComment);
+        this.express.post('/post/comment/', auth, this.commentController.newComment);
+        this.express.post('/post/comment/delete/:id', auth, this.commentController.deleteComment);
+        this.express.post('/post/comment/update/:id', auth, this.commentController.updateComment);
     }
 }
 

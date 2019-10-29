@@ -1,16 +1,20 @@
 import {User} from "../../Entities/User";
 import NewUserCommand from "../../../Infraestructure/Commands/UserCommands/NewUserCommand";
+import {injectable} from "inversify";
 
+@injectable()
 export default class NewUserHandler {
-    public static execute = async (command: NewUserCommand) => {
-        try {
-            const {username, email, password, roleName} = command;
-            const user = new User(username, email, roleName, password);
-            await user.save();
+    public execute = async (command: NewUserCommand) => {
+        const {username, email, password, roleName} = command;
 
-            return user;
-        } catch (error) {
-            throw error;
+        let user = await User.findOne({email});
+        if (user) {
+            throw Error("User already registered.");
         }
+
+        user = new User(username, email, roleName, password);
+        await user.save();
+
+        return user;
     }
 }

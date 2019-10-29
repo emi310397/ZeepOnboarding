@@ -7,7 +7,7 @@ import {injectable} from "inversify";
 @injectable()
 export class CommentController {
 
-    public static async getComment(req: Request, res: Response) {
+    public async getComment(req: Request, res: Response) {
         const {id} = req.params;
 
         const comment = await Comment.findOne(id);
@@ -19,7 +19,7 @@ export class CommentController {
         res.status(200).json({comment});
     }
 
-    public static async newComment(req: Request, res: Response) {
+    public async newComment(req: Request, res: Response) {
         const {userId, postId, content} = req.body;
 
         const user = await User.findOne({id: userId});
@@ -47,7 +47,7 @@ export class CommentController {
         }
     }
 
-    public static async deleteComment(req: Request, res: Response) {
+    public async deleteComment(req: Request, res: Response) {
         const {id} = req.params;
 
         const comment = await Comment.findOne(id);
@@ -61,7 +61,7 @@ export class CommentController {
         res.status(200).json("Comment deleted");
     }
 
-    public static async updateComment(req: Request, res: Response) {
+    public async updateComment(req: Request, res: Response) {
         const {id} = req.params;
         const content = req.body;
 

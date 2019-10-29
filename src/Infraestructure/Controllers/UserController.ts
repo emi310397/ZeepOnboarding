@@ -1,71 +1,53 @@
 import {Request, Response} from 'express';
 import {User} from '../../Domain/Entities/User';
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import config from "config";
 import NewUserAdapter from "../Adapters/UserAdapters/NewUserAdapter";
 import NewUserHandler from "../../Domain/Handlers/UserHandler/NewUserHandler";
 import {inject, injectable} from 'inversify';
 import TYPES from "../../types";
+import LogInAdapter from "../Adapters/UserAdapters/LogInAdapter";
+import LogInHandler from "../../Domain/Handlers/UserHandler/LogInHandler";
 
 @injectable()
 export class UserController {
 
     private newUserAdapter: NewUserAdapter;
+    private logInAdapter: LogInAdapter;
     private newUserHandler: NewUserHandler;
+    private logInHandler: LogInHandler;
 
     constructor(
         @inject(TYPES.NewUserAdapter) newUserAdapter: NewUserAdapter,
+        @inject(TYPES.LogInAdapter) logInAdapter: LogInAdapter,
+        @inject(TYPES.LogInHandler) logInHandler: LogInHandler,
         @inject(TYPES.NewUserHandler) newUserHandler: NewUserHandler
     ) {
         this.newUserAdapter = newUserAdapter;
+        this.logInAdapter = logInAdapter;
         this.newUserHandler = newUserHandler;
+        this.logInHandler = logInHandler;
     }
 
-    public static signUp = async (req: Request, res: Response) => {
+    public signUp = async (req: Request, res: Response) => {
         try {
-            const command = await NewUserAdapter.adapt(req);
-            const user = await NewUserHandler.execute(command);
-            res.header("x-auth-token", command.token).status(200).json({message: "User registered", user});
+            const command = await this.newUserAdapter.adapt(req);
+            const user = await this.newUserHandler.execute(command);
+            res.header("x-auth-token", command.token).status(200).json({message: "User registered.", user});
         } catch (error) {
             res.status(500).json(error);
         }
     };
 
-    public static async showSignUp(req: Request, res: Response) {
-        res.render('auth/signup');
-    }
-
-    public static async logIn(req: Request, res: Response) {
-        const {email, password} = req.body;
-        const user = await User.findOne({where: {email}});
-
-        if (await bcrypt.compare(password, user.password)) {
-            //create the token
-            const token = await UserController.generateAuthToken(user);
-
-            res.header("x-auth-token", token).send({
-                id: user.id,
-                username: user.username,
-                email: user.email
-            });
-
-            user.token = token;
-            await user.save();
-
-            res.status(200).json({user});
-        } else {
-            res.status(401).json("Access denied. Invalid credentials.");
+    public logIn = async (req: Request, res: Response) => {
+        try {
+            const command = await this.logInAdapter.adapt(req);
+            const user = await this.logInHandler.execute(command);
+            res.header("x-auth-token", command.token).status(200).json({message: "User logged in.", user});
+        } catch (error) {
+            res.status(500).json(error);
         }
-    }
+    };
 
-    public static async getUser(req: Request, res: Response) {
-        const {id} = req.params;
-        const user = await User.findOne(id);
-        res.status(200).json({user});
-    }
-
-    public static async logout(req: Request, res: Response) {
+    public async logout(req: Request, res: Response) {
         const {id} = req.params;
         const user = await User.findOne(id);
 
@@ -77,17 +59,9 @@ export class UserController {
         res.status(200).json("Logged out");
     }
 
-    public static generateAuthToken = async user => {
-        const token = await jwt.sign({id: user.id, role: user.role}, config.get('myprivatekey'));
-        return token;
-    };
-
-    public static destroyAuthToken = async user => {
-        try {
-            user.token = "";
-            await user.save();
-        } catch (error) {
-            return error;
-        }
-    };
+    public async getUser(req: Request, res: Response) {
+        const {id} = req.params;
+        const user = await User.findOne(id);
+        res.status(200).json({user});
+    }
 }

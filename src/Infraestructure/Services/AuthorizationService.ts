@@ -8,15 +8,15 @@ const config = require("config");
 @injectable()
 export default class AuthorizationService {
 
-    public static generateAuthToken = async (user: User) => {
+    public generateAuthToken = async (user: User) => {
         return jwt.sign({id: user._id, role: user.role}, config.get('myprivatekey'));
     };
 
-    public static compareAuthToken = async (token: string) => {
+    public compareAuthToken = async (token: string) => {
         return jwt.verify(token, config.get("myprivatekey"));
     };
 
-    public static destroyAuthToken = async (user: User) => {
+    public destroyAuthToken = async (user: User) => {
         try {
             const session = await Session.findOne({user});
             session.token = "";
